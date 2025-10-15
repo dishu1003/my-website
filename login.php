@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (!$error) {
-        $username = Sanitizer::string($_POST['username'] ?? '');
+        $username = Sanitizer::clean($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
 
         error_log("LOGIN: attempting login for user=$username");
