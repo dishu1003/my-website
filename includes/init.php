@@ -29,6 +29,9 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
+// Load main configuration
+require_once __DIR__ . '/../config/config.php';
+
 // Load database configuration
 require_once __DIR__ . '/../config/database.php';
 
