@@ -47,13 +47,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Please enter both username and password.';
             error_log("LOGIN: empty username or password");
         } else {
-            if (login_user($username, $password)) {
-                error_log("LOGIN: login_user returned TRUE, redirecting...");
-                header('Location: ' . (is_admin() ? '/admin/' : '/team/'));
-                exit;
-            } else {
-                $error = 'Invalid credentials. Please try again.';
-                error_log("LOGIN: login_user returned FALSE");
+            try {
+                if (login_user($username, $password)) {
+                    error_log("LOGIN: login_user returned TRUE, redirecting...");
+                    header('Location: ' . (is_admin() ? '/admin/' : '/team/'));
+                    exit;
+                } else {
+                    $error = 'Invalid credentials. Please try again.';
+                    error_log("LOGIN: login_user returned FALSE");
+                }
+            } catch (Exception $e) {
+                error_log("LOGIN: Database error during login process: " . $e->getMessage());
+                $error = "Could not connect to the service. Please try again later.";
             }
         }
     }
