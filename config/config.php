@@ -1,63 +1,63 @@
 <?php
-require_once __DIR__ . '/env.php';
+// config/config.php
 
-// Start session with secure settings
-if (session_status() !== PHP_SESSION_ACTIVE) {
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path' => '/',
-        'domain' => env('SITE_DOMAIN'),
-        'secure' => true,
-        'httponly' => true,
-        'samesite' => 'Lax',
-    ]);
-    session_start();
-}
+// env.php is required for the env() function
+require_once __DIR__ . '/../includes/env.php';
 
-// Site Configuration
-define('SITE_URL', env('SITE_URL'));
-define('SITE_NAME', env('SITE_NAME'));
-define('WEBHOOK_SECRET', env('WEBHOOK_SECRET'));
+// --- Application Settings ---
+define('SITE_NAME', env('SITE_NAME', 'Spartan Community'));
+define('SITE_URL', env('SITE_URL', 'http://localhost'));
+define('APP_DEBUG', env('APP_DEBUG', false));
+define('TIMEZONE', env('TIMEZONE', 'Asia/Kolkata'));
 
-// Abacus AI Webhook URL
-define('ABACUS_WEBHOOK_URL', env('ABACUS_WEBHOOK_URL'));
+// --- Database Credentials ---
+define('DB_HOST', env('DB_HOST', 'localhost'));
+define('DB_USER', env('DB_USER', 'root'));
+define('DB_PASS', env('DB_PASS', ''));
+define('DB_NAME', env('DB_NAME', 'spartan'));
 
-// Timezone
-date_default_timezone_set(env('TIMEZONE', 'Asia/Kolkata'));
+// --- Security Settings ---
+define('ENCRYPTION_KEY', env('ENCRYPTION_KEY', '')); // Fallback to empty, but should be set in .env
+define('WEBHOOK_SECRET', env('WEBHOOK_SECRET', ''));
+define('SESSION_SECRET', env('SESSION_SECRET', ''));
+define('SESSION_TIMEOUT', 1800); // 30 minutes
+define('LOGIN_ATTEMPT_LIMIT', 5);
+define('LOGIN_ATTEMPT_WINDOW', 900); // 15 minutes
+define('LOGIN_LOCKOUT_PERIOD', 1800); // 30 minutes
 
-// Security
-define('ENCRYPTION_KEY', env('ENCRYPTION_KEY'));
+// Set timezone
+date_default_timezone_set(TIMEZONE);
 
-// App Environment
-define('APP_ENV', env('APP_ENV', 'production'));
-define('APP_DEBUG', env('APP_DEBUG', 'false') === 'true');
+// --- Helper Functions ---
 
 /**
- * Encrypt data using AES-256-CBC
+ * Encrypt data
+ * @param string $data
+ * @return string
  */
 function encrypt_data($data) {
+    if (!ENCRYPTION_KEY) return $data; // Or throw an exception
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
     $encrypted = openssl_encrypt($data, 'aes-256-cbc', ENCRYPTION_KEY, 0, $iv);
     return base64_encode($encrypted . '::' . $iv);
 }
 
 /**
- * Decrypt data using AES-256-CBC
+ * Decrypt data
+ * @param string $data
+ * @return string
  */
 function decrypt_data($data) {
+    if (!ENCRYPTION_KEY) return $data; // Or throw an exception
     try {
         list($encrypted_data, $iv) = explode('::', base64_decode($data), 2);
+        if (!$encrypted_data || !$iv) {
+            return false; // Invalid data format
+        }
         return openssl_decrypt($encrypted_data, 'aes-256-cbc', ENCRYPTION_KEY, 0, $iv);
     } catch (Exception $e) {
-        error_log("Decryption failed: " . $e->getMessage());
+        // Log the error
+        error_log('Decryption failed: ' . $e->getMessage());
         return false;
     }
 }
-
-/**
- * Generate secure random string
- */
-function generate_random_string($length = 32) {
-    return bin2hex(random_bytes($length / 2));
-}
-?>

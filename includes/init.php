@@ -4,9 +4,6 @@
 // Load environment variables
 require_once __DIR__ . '/env.php';
 
-// Set cookie domain for subdomain-wide access
-$cookieDomain = 'spartancommunityindia.dishantparihar.com'; // leading dot for subdomain support
-
 // Auto-detect HTTPS
 $secure = false;
 if (
@@ -21,13 +18,15 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     session_set_cookie_params([
         'lifetime' => 0,
         'path' => '/',
-        'domain' => $cookieDomain,
         'secure' => $secure,
         'httponly' => true,
         'samesite' => 'Lax',
     ]);
     session_start();
 }
+
+// Load main configuration
+require_once __DIR__ . '/../config/config.php';
 
 // Load database configuration
 require_once __DIR__ . '/../config/database.php';
