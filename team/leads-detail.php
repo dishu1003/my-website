@@ -5,6 +5,7 @@ require_once '../includes/functions.php';
 require_login();
 
 $user = get_current_user();
+$pdo = get_pdo_connection();
 $lead_id = $_GET['id'] ?? 0;
 
 // Fetch lead (ensure it's assigned to this user)

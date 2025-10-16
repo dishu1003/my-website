@@ -18,7 +18,9 @@ class EnvLoader {
         }
 
         if (!file_exists($path)) {
-            throw new Exception('.env file not found at: ' . $path);
+            // If .env file is missing, just return.
+            // The application will use default values from config.php
+            return;
         }
 
         $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -66,9 +68,6 @@ class EnvLoader {
         return $value;
     }
 }
-
-// Auto-load on include
-EnvLoader::load();
 
 // Helper function
 function env($key, $default = null) {

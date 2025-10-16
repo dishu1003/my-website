@@ -4,6 +4,7 @@ require_once '../config/database.php';
 require_once '../includes/functions.php';
 require_admin();
 
+$pdo = get_pdo_connection();
 $lead_id = $_GET['id'] ?? 0;
 
 // Fetch lead

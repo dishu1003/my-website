@@ -4,6 +4,7 @@ require_once '../config/database.php';
 require_login();
 
 $user = get_current_user();
+$pdo = get_pdo_connection();
 
 // Fetch leads assigned to this user
 $stmt = $pdo->prepare("
