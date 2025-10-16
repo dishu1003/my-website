@@ -20,7 +20,11 @@ check_session_timeout();
 
 try {
     $pdo = get_pdo_connection();
+fix/login-error-handling
     // CRM Stats
+=======
+    // Stats with error handling
+ main
     $total_leads = $pdo->query("SELECT COUNT(*) FROM leads")->fetchColumn();
     $organic_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE source = 'organic'")->fetchColumn();
     $ad_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE source != 'organic'")->fetchColumn(); // Simplified for now
