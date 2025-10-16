@@ -3,6 +3,7 @@ require_once '../includes/auth.php';
 require_once '../config/database.php';
 require_login();
 
+$pdo = get_pdo_connection();
 $stmt = $pdo->query("SELECT * FROM scripts WHERE visibility = 'all' ORDER BY type, title");
 $scripts = $stmt->fetchAll();
 
