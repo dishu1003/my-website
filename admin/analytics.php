@@ -3,6 +3,8 @@ require_once '../includes/auth.php';
 require_once '../config/database.php';
 require_admin();
 
+$pdo = get_pdo_connection();
+
 // Conversion rates
 $total_leads = $pdo->query("SELECT COUNT(*) FROM leads")->fetchColumn();
 $step2_completed = $pdo->query("SELECT COUNT(*) FROM leads WHERE current_step >= 2")->fetchColumn();
