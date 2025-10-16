@@ -3,6 +3,8 @@ require_once '../includes/auth.php';
 require_once '../config/database.php';
 require_admin();
 
+$pdo = get_pdo_connection();
+
 // Handle script actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_script'])) {
