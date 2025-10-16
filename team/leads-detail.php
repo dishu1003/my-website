@@ -76,11 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" style="display:inline;">
                 <select name="status" required>
                     <option value="">Update Status...</option>
-                    <option value="new">New</option>
-                    <option value="contacted">Contacted</option>
-                    <option value="qualified">Qualified</option>
-                    <option value="converted">Converted</option>
-                    <option value="lost">Lost</option>
+                    <option value="New" <?php echo $lead['status'] == 'New' ? 'selected' : ''; ?>>New</option>
+                    <option value="Contacted" <?php echo $lead['status'] == 'Contacted' ? 'selected' : ''; ?>>Contacted</option>
+                    <option value="Plan Shown" <?php echo $lead['status'] == 'Plan Shown' ? 'selected' : ''; ?>>Plan Shown</option>
+                    <option value="Follow-up" <?php echo $lead['status'] == 'Follow-up' ? 'selected' : ''; ?>>Follow-up</option>
+                    <option value="Joined" <?php echo $lead['status'] == 'Joined' ? 'selected' : ''; ?>>Joined</option>
+                    <option value="Not Interested" <?php echo $lead['status'] == 'Not Interested' ? 'selected' : ''; ?>>Not Interested</option>
                 </select>
                 <button type="submit" name="update_status">Update</button>
             </form>

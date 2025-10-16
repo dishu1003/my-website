@@ -20,14 +20,18 @@ check_session_timeout();
 
 try {
     $pdo = get_pdo_connection();
+fix/login-error-handling
+    // CRM Stats
+=======
     // Stats with error handling
+ main
     $total_leads = $pdo->query("SELECT COUNT(*) FROM leads")->fetchColumn();
-    $hot_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE lead_score = 'HOT'")->fetchColumn();
-    $converted = $pdo->query("SELECT COUNT(*) FROM leads WHERE status = 'converted'")->fetchColumn();
-    $total_team = $pdo->query("SELECT COUNT(*) FROM users WHERE role = 'team'")->fetchColumn();
+    $organic_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE source = 'organic'")->fetchColumn();
+    $ad_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE source != 'organic'")->fetchColumn(); // Simplified for now
+    $joined_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE status = 'Joined'")->fetchColumn();
 
     // Recent leads
-    $stmt = $pdo->query("SELECT * FROM leads ORDER BY created_at DESC LIMIT 20");
+    $stmt = $pdo->query("SELECT * FROM leads ORDER BY created_at DESC LIMIT 10");
     $recent_leads = $stmt->fetchAll();
 
     Logger::info('Admin dashboard accessed', [
@@ -181,21 +185,21 @@ try {
                 <h3>Total Leads</h3>
                 <p class="stat-number"><?php echo number_format($total_leads); ?></p>
             </div>
+            <div class="stat-card">
+                <h3>Organic Leads</h3>
+                <p class="stat-number"><?php echo number_format($organic_leads); ?></p>
+            </div>
+            <div class="stat-card">
+                <h3>Ad Leads</h3>
+                <p class="stat-number"><?php echo number_format($ad_leads); ?></p>
+            </div>
             <div class="stat-card hot">
-                <h3>🔥 HOT Leads</h3>
-                <p class="stat-number"><?php echo number_format($hot_leads); ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>✅ Converted</h3>
-                <p class="stat-number"><?php echo number_format($converted); ?></p>
-            </div>
-            <div class="stat-card">
-                <h3>👥 Team Members</h3>
-                <p class="stat-number"><?php echo number_format($total_team); ?></p>
+                <h3>✅ New Joinees</h3>
+                <p class="stat-number"><?php echo number_format($joined_leads); ?></p>
             </div>
         </div>
 
-        <h2>Recent Leads</h2>
+        <h2>Recent Leads (Last 10)</h2>
         <?php if (empty($recent_leads)): ?>
             <p style="text-align:center; color:#999; padding:40px;">No leads found.</p>
         <?php else: ?>

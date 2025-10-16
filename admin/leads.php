@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div>
                     <p><strong>🎯 Status:</strong> <?php echo ucfirst($lead['status']); ?></p>
-                    <p><strong>🔗 Ref ID:</strong> <?php echo htmlspecialchars($lead['ref_id'] ?: 'Direct'); ?></p>
+                    <p><strong>🌱 Source:</strong> <?php echo ucfirst(str_replace('_', ' ', $lead['source'] ?? 'organic')); ?></p>
                     <p><strong>📅 Created:</strong> <?php echo date('d M Y, h:i A', strtotime($lead['created_at'])); ?></p>
                 </div>
                 <div>
@@ -131,11 +131,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" style="display:inline-block; margin-right:15px;">
                 <select name="status" required>
                     <option value="">Update Status...</option>
-                    <option value="new" <?php echo $lead['status'] == 'new' ? 'selected' : ''; ?>>New</option>
-                    <option value="contacted" <?php echo $lead['status'] == 'contacted' ? 'selected' : ''; ?>>Contacted</option>
-                    <option value="qualified" <?php echo $lead['status'] == 'qualified' ? 'selected' : ''; ?>>Qualified</option>
-                    <option value="converted" <?php echo $lead['status'] == 'converted' ? 'selected' : ''; ?>>Converted</option>
-                    <option value="lost" <?php echo $lead['status'] == 'lost' ? 'selected' : ''; ?>>Lost</option>
+                    <option value="New" <?php echo $lead['status'] == 'New' ? 'selected' : ''; ?>>New</option>
+                    <option value="Contacted" <?php echo $lead['status'] == 'Contacted' ? 'selected' : ''; ?>>Contacted</option>
+                    <option value="Plan Shown" <?php echo $lead['status'] == 'Plan Shown' ? 'selected' : ''; ?>>Plan Shown</option>
+                    <option value="Follow-up" <?php echo $lead['status'] == 'Follow-up' ? 'selected' : ''; ?>>Follow-up</option>
+                    <option value="Joined" <?php echo $lead['status'] == 'Joined' ? 'selected' : ''; ?>>Joined</option>
+                    <option value="Not Interested" <?php echo $lead['status'] == 'Not Interested' ? 'selected' : ''; ?>>Not Interested</option>
                 </select>
                 <button type="submit" name="update_status">Update</button>
             </form>
