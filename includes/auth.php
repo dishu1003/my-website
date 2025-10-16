@@ -58,10 +58,10 @@ function require_admin() {
  * Get current logged in user
  */
 function get_logged_in_user() {
-    global $pdo;
     if (!is_logged_in()) return null;
 
     try {
+        $pdo = get_pdo_connection();
         $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
         $stmt->execute([$_SESSION['user_id']]);
         return $stmt->fetch();
@@ -78,7 +78,7 @@ function get_logged_in_user() {
  * Login user with rate limiting and logging
  */
 function login_user($username, $password) {
-    global $pdo;
+    $pdo = get_pdo_connection();
 
     // Rate limiting - 5 attempts per 15 minutes, block for 30 minutes
     $rateLimiter = new RateLimiter($pdo, 'login_attempt');

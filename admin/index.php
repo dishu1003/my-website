@@ -19,6 +19,7 @@ require_admin();
 check_session_timeout();
 
 try {
+    $pdo = get_pdo_connection();
     // Stats with error handling
     $total_leads = $pdo->query("SELECT COUNT(*) FROM leads")->fetchColumn();
     $hot_leads = $pdo->query("SELECT COUNT(*) FROM leads WHERE lead_score = 'HOT'")->fetchColumn();
